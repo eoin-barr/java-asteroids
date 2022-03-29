@@ -64,7 +64,7 @@ public class GameMechanic {
                     ship.decelerate();
                 }
                 if (pressedKeys.getOrDefault(KeyCode.H, false)){
-                    ship.hyperJump();
+                    ship.hyperJump(asteroids);
                     pressedKeys.put(KeyCode.H, false);
                 }
 
@@ -92,7 +92,7 @@ public class GameMechanic {
 
                 deleteDeadCharacters(projectiles);
                 deleteDeadCharacters(asteroids);
-                spawnAdditionalAsteroid();
+//                spawnAdditionalAsteroid();
 
             }
         }.start();
@@ -124,7 +124,7 @@ public class GameMechanic {
     public void spawnAdditionalAsteroid() {
         if (Math.random() < 0.005) {
             Random rand = new Random();
-            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()));
+            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE);
             if (!asteroid.collide(ship)) {
                 asteroids.add(asteroid);
                 asteroid.setAlive(true);
@@ -135,9 +135,9 @@ public class GameMechanic {
 
     public void spawnInitialAsteroids() {
         asteroids = new ArrayList<>();
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 3; i++) {
             Random rand = new Random();
-            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()));
+            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.SMALL);
             asteroids.add(asteroid);
             asteroid.setAlive(true);
         }
@@ -170,10 +170,21 @@ public class GameMechanic {
                 if (projectile.collide(asteroid)) {
                     projectile.setAlive(false);
                     asteroid.setAlive(false);
-                    pointsCounter.increasePoints();
+                    pointsCounter.increasePoints(getScore(asteroid.getSize()));
                 }
             });
         });
+    }
+
+    public int getScore(AsteroidSize size){
+        System.out.println(size);
+        if (size == AsteroidSize.LARGE){
+            return 200;
+        }else if (size == AsteroidSize.MEDIUM){
+            return 500;
+        }else {
+            return 1000;
+        }
     }
 
     public Pane getGamePane() {

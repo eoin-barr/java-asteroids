@@ -6,10 +6,19 @@ import java.util.Random;
 
 public class PolygonFactory {
 
-    public static Polygon createPolygon() {
+    public static Polygon createPolygon(AsteroidSize asteroidSize) {
         Random rnd = new Random();
+        int base;
 
-        double size = 10 + rnd.nextInt(10);
+        if (asteroidSize == AsteroidSize.LARGE){
+            base = 16;
+        } else if (asteroidSize == AsteroidSize.MEDIUM){
+            base = 10;
+        }else {
+            base = 4;
+        }
+
+        double size = base + rnd.nextInt(5);
 
         Polygon polygon = new Polygon();
         double c1 = Math.cos(Math.PI * 2 / 5);

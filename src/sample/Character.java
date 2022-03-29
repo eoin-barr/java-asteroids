@@ -5,6 +5,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
+import java.util.List;
 import java.util.Random;
 
 public abstract class Character {
@@ -12,6 +13,7 @@ public abstract class Character {
     private Polygon character;
     private Point2D movement;
     private boolean alive;
+    private AsteroidSize size;
 
     public Character(Polygon polygon, int x, int y) {
         this.character = polygon;
@@ -31,11 +33,26 @@ public abstract class Character {
     public void turnRight() {
         this.character.setRotate(this.character.getRotate() + 5);
     }
-    
-    public void hyperJump(){
+
+    public void hyperJump(List<Character> asteroids){
         Random rand = new Random();
-        this.character.setTranslateX(rand.nextDouble() * GameView.gameScreenWidth);
-        this.character.setTranslateY(rand.nextDouble() * GameView.gameScreenHeight);
+        double newX = rand.nextDouble() * GameView.gameScreenWidth;
+        double newY = rand.nextDouble() * GameView.gameScreenHeight;
+
+        // Prevents collision of ship with asteroid upon hyperJump
+        asteroids.forEach(asteroid -> {
+            if (
+                    (asteroid.getCharacter().getTranslateX() > newX - 25
+                    && asteroid.getCharacter().getTranslateX() < newX + 25)
+                    || (asteroid.getCharacter().getTranslateY() > newY - 25
+                    && asteroid.getCharacter().getTranslateY() < newY + 25)
+            ){
+                this.hyperJump(asteroids);
+            }
+        });
+
+        this.character.setTranslateX(newX);
+        this.character.setTranslateY(newY);
     }
 
 
@@ -102,5 +119,13 @@ public abstract class Character {
 
     public boolean isAlive(){
         return alive;
+    }
+
+    public void setSize(AsteroidSize size){
+        this.size = size;
+    }
+
+    public AsteroidSize getSize(){
+        return this.size;
     }
 }

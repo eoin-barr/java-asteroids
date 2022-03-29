@@ -12,6 +12,7 @@ public class Projectile extends Character{
         super.getCharacter().setTranslateX(super.getCharacter().getTranslateX() + super.getMovement().getX());
         super.getCharacter().setTranslateY(super.getCharacter().getTranslateY() + super.getMovement().getY());
 
+        // Removes projectiles once it leaves the bounds bounds of the window
         if(super.getCharacter().getTranslateX()>GameView.gameScreenWidth){
             setAlive(false);
         }
@@ -27,5 +28,6 @@ public class Projectile extends Character{
         if(super.getCharacter().getTranslateY()<0){
             setAlive(false);
         }
+
     }
 }

@@ -13,7 +13,7 @@ public class PointsCounter {
         this.text = text;
     }
 
-    public void increasePoints(){
-        text.setText("Points: " + points.addAndGet(1000));
+    public void increasePoints(int points_to_add){
+        text.setText("Points: " + points.addAndGet(points_to_add));
     }
 }
