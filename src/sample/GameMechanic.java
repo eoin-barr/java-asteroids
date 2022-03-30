@@ -228,7 +228,6 @@ public class GameMechanic {
     }
 
     public int getScore(AsteroidSize size){
-        System.out.println(size);
         if (size == AsteroidSize.LARGE){
             return 200;
         }else if (size == AsteroidSize.MEDIUM){
