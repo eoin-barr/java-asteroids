@@ -88,11 +88,14 @@ public class GameMechanic {
                     stop();
                 }
 
-                checkForProjectileCollision();
+
+
 
                 deleteDeadCharacters(projectiles);
                 deleteDeadCharacters(asteroids);
 //                spawnAdditionalAsteroid();
+                checkForProjectileCollision();
+
 
             }
         }.start();
@@ -135,9 +138,9 @@ public class GameMechanic {
 
     public void spawnInitialAsteroids() {
         asteroids = new ArrayList<>();
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i < 1; i++) {
             Random rand = new Random();
-            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.SMALL);
+            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE);
             asteroids.add(asteroid);
             asteroid.setAlive(true);
         }
@@ -169,8 +172,28 @@ public class GameMechanic {
             asteroids.forEach(asteroid -> {
                 if (projectile.collide(asteroid)) {
                     projectile.setAlive(false);
+                    int x = (int) asteroid.getCharacter().getTranslateX();
+                    int y = (int) asteroid.getCharacter().getTranslateY();
+                    AsteroidSize asteroidSize = asteroid.getSize();
                     asteroid.setAlive(false);
                     pointsCounter.increasePoints(getScore(asteroid.getSize()));
+                    AsteroidSize size;
+                    for (int i = 0; i < 2; i++){
+                        if (asteroidSize == AsteroidSize.LARGE){
+                            size = AsteroidSize.MEDIUM;
+                        }else if (asteroidSize == AsteroidSize.MEDIUM){
+                            size = AsteroidSize.SMALL;
+                        }else {
+                            break;
+                        }
+                        Asteroid newAsteroid = new Asteroid(x, y, size);
+                        if (!newAsteroid.collide(ship)) {
+                            asteroids.add(newAsteroid);
+                            newAsteroid.setAlive(true);
+                            gamePane.getChildren().add(newAsteroid.getCharacter());
+                        }
+                    }
+
                 }
             });
         });
