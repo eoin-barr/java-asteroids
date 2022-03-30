@@ -19,11 +19,11 @@ public class Asteroid extends Character {
         int base;
 
         if (size == AsteroidSize.LARGE){
-            base = 5;
-        }else if (size == AsteroidSize.MEDIUM){
             base = 10;
+        }else if (size == AsteroidSize.MEDIUM){
+            base = 20;
         }else {
-            base = 15;
+            base = 30;
         }
 
         super.setSize(size);
