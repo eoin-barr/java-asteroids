@@ -36,7 +36,7 @@ public class GameView {
         gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
 
 
-        Text mainMenu = new Text(10, 60, "Main Menu");
+        Text mainMenu = new Text(10, 80, "Main Menu");
         mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -77,11 +77,15 @@ public class GameView {
         Text levelsText = new Text(10, 40, "Level: 1");
         ValueCounter levelsCounter = new ValueCounter(levelsText);
 
-        game.setupGameComponents(pointsCounter, levelsCounter);
+        Text livesText = new Text(10, 60, "Lives: 0");
+        ValueCounter livesCounter = new ValueCounter(livesText);
+
+        game.setupGameComponents(pointsCounter, levelsCounter, livesCounter);
 
         gameView.getChildren().add(game.getGamePane());
         gameView.getChildren().add(pointText);
         gameView.getChildren().add(levelsText);
+        gameView.getChildren().add(livesText);
         gameView.getChildren().add(mainMenu);
 
     }

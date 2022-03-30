@@ -20,4 +20,12 @@ public class ValueCounter {
     public void increaseLevel(){
         text.setText("Level: " + value.addAndGet(1));
     }
+
+    public void decreaseLives(){
+        text.setText("Lives: " + value.decrementAndGet());
+    }
+
+    public void increaseLives(int livesToAdd){
+        text.setText("Lives: " + value.addAndGet(livesToAdd));
+    }
 }

@@ -18,7 +18,9 @@ public class GameMechanic {
     private Character ship;
     private ValueCounter pointsCounter;
     private ValueCounter levelsCounter;
+    private ValueCounter livesCounter;
     private int level;
+    private int lives;
 
     public GameMechanic(Scene scene, GameView gameView) {
         this.gameSettings = gameView;
@@ -30,11 +32,14 @@ public class GameMechanic {
     }
 
 
-    public void setupGameComponents(ValueCounter pointsCounter, ValueCounter levelsCounter) {
+    public void setupGameComponents(ValueCounter pointsCounter, ValueCounter levelsCounter, ValueCounter livesCounter) {
         this.pointsCounter = pointsCounter;
         this.levelsCounter = levelsCounter;
+        this.livesCounter = livesCounter;
         levelsCounter.increaseLevel();
+        livesCounter.increaseLives(2);
         this.level = 1;
+        this.lives = 2;
 
         spawnInitialAsteroids();
 
@@ -86,8 +91,16 @@ public class GameMechanic {
                 ensureCharactersMovement();
 
                 if(checkForShipCollision()){
+                    lives -= 1;
+                    livesCounter.decreaseLives();
+                    ship.hyperJump(asteroids);
+                }
+
+                if (lives < 1){
                     stop();
                 }
+
+
 
                 if (asteroids.size() < 1){
                     levelsCounter.increaseLevel();

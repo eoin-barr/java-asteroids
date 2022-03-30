@@ -11,11 +11,11 @@ public class PolygonFactory {
         int base;
 
         if (asteroidSize == AsteroidSize.LARGE){
-            base = 16;
+            base = 30;
         } else if (asteroidSize == AsteroidSize.MEDIUM){
-            base = 10;
+            base = 20;
         }else {
-            base = 4;
+            base = 10;
         }
 
         double size = base + rnd.nextInt(5);
