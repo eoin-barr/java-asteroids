@@ -3,7 +3,6 @@ package sample;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -12,12 +11,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Logger;
 
 public class GameView {
     private Scene gameScene;
@@ -39,8 +36,8 @@ public class GameView {
         gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
 
 
-        Text text2 = new Text(10, 40, "Main Menu");
-        text2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        Text mainMenu = new Text(10, 60, "Main Menu");
+        mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try (FileWriter fw = new FileWriter("scores.txt", true);
@@ -54,7 +51,7 @@ public class GameView {
                     System.out.println(e);
                 }
 
-                Window stage = text2.getScene().getWindow();
+                Window stage = mainMenu.getScene().getWindow();
                 stage.hide();
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader();
@@ -74,14 +71,18 @@ public class GameView {
 
             }
         });
-        Text text = new Text(10, 20, "Points: 0");
-        PointsCounter pointsCounter = new PointsCounter(text);
+        Text pointText = new Text(10, 20, "Points: 0");
+        ValueCounter pointsCounter = new ValueCounter(pointText);
 
-        game.setupGameComponents(pointsCounter);
+        Text levelsText = new Text(10, 40, "Level: 1");
+        ValueCounter levelsCounter = new ValueCounter(levelsText);
+
+        game.setupGameComponents(pointsCounter, levelsCounter);
 
         gameView.getChildren().add(game.getGamePane());
-        gameView.getChildren().add(text);
-        gameView.getChildren().add(text2);
+        gameView.getChildren().add(pointText);
+        gameView.getChildren().add(levelsText);
+        gameView.getChildren().add(mainMenu);
 
     }
 

@@ -1,13 +1,9 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.PathTransition;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,7 +16,9 @@ public class GameMechanic {
     private List<Character> asteroids;
     private List<Character> projectiles;
     private Character ship;
-    private PointsCounter pointsCounter;
+    private ValueCounter pointsCounter;
+    private ValueCounter levelsCounter;
+    private int level;
 
     public GameMechanic(Scene scene, GameView gameView) {
         this.gameSettings = gameView;
@@ -32,8 +30,11 @@ public class GameMechanic {
     }
 
 
-    public void setupGameComponents(PointsCounter pointsCounter) {
+    public void setupGameComponents(ValueCounter pointsCounter, ValueCounter levelsCounter) {
         this.pointsCounter = pointsCounter;
+        this.levelsCounter = levelsCounter;
+        levelsCounter.increaseLevel();
+        this.level = 1;
 
         spawnInitialAsteroids();
 
@@ -88,12 +89,26 @@ public class GameMechanic {
                     stop();
                 }
 
+                if (asteroids.size() < 1){
+                    levelsCounter.increaseLevel();
+                    level += 1;
+                    for (int i = 0; i < level; i++){
+                        Random rand = new Random();
+                        Asteroid newAsteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE);
+                        if (!newAsteroid.collide(ship)) {
+                            asteroids.add(newAsteroid);
+                            newAsteroid.setAlive(true);
+                            gamePane.getChildren().add(newAsteroid.getCharacter());
+                        }
+                    }
 
+                }
 
 
                 deleteDeadCharacters(projectiles);
                 deleteDeadCharacters(asteroids);
 //                spawnAdditionalAsteroid();
+
                 checkForProjectileCollision();
 
 
