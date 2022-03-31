@@ -5,8 +5,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Window;
+import sample.AsteroidsApplication;
 
-public class Controller extends AsteroidsApplication{
+public class Controller extends AsteroidsApplication {
     @FXML public Button gameButton;
 
     public void navigateGame() throws Exception {

@@ -1,4 +1,4 @@
-package sample;
+package sample.scenes;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,8 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import sample.AsteroidsApplication;
 
-public class GameOverController extends AsteroidsApplication{
+public class GameOverController extends AsteroidsApplication {
     @FXML public Button mainMenuButton;
 
     public void navigateMainMenu() throws Exception {

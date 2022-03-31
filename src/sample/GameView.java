@@ -84,7 +84,7 @@ public class GameView {
         stage.hide();
         try{
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("gameOver.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("scenes/gameOver.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 700, 500);
             Stage stage2 = new Stage();
             stage2.setTitle("Asteroids");
