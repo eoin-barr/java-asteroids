@@ -1,29 +1,28 @@
 package sample;
 
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 import java.util.List;
 import java.util.Random;
 
 public abstract class Character {
 
-    private Polygon character;
-    private Point2D movement;
     private boolean alive;
+    private Point2D movement;
     private AsteroidSize size;
+    private Polygon character;
     private ProjectileType projectileType;
 
     public Character(Polygon polygon, int x, int y) {
         this.character = polygon;
-        this.character.setTranslateX(x);
         this.character.setTranslateY(y);
-        this.movement = new Point2D(0, 0);
+        this.character.setTranslateX(x);
         this.character.setFill(Color.HOTPINK);
         this.character.setStroke(Color.HOTPINK);
+        this.movement = new Point2D(0, 0);
     }
 
     public Polygon getCharacter() {
@@ -43,7 +42,6 @@ public abstract class Character {
         double newX = rand.nextDouble() * GameView.gameScreenWidth;
         double newY = rand.nextDouble() * GameView.gameScreenHeight;
 
-        // Prevents collision of ship with asteroid upon hyperJump
         asteroids.forEach(asteroid -> {
             if (
                     (asteroid.getCharacter().getTranslateX() > newX - 25
@@ -54,11 +52,9 @@ public abstract class Character {
                 this.hyperJump(asteroids);
             }
         });
-
         this.character.setTranslateX(newX);
         this.character.setTranslateY(newY);
     }
-
 
     public void move() {
         this.character.setTranslateX(this.character.getTranslateX() + this.movement.getX());
@@ -80,7 +76,6 @@ public abstract class Character {
             this.character.setTranslateY(this.character.getTranslateY() % GameView.gameScreenHeight);
         }
     }
-
 
     public void accelerate() {
         double changeX = Math.cos(Math.toRadians(this.character.getRotate()));

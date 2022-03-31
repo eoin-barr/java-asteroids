@@ -13,7 +13,6 @@ public class Projectile extends Character{
         super.setAsteroidType(type);
     }
 
-
     @Override
     public void move() {
         super.getCharacter().setTranslateX(super.getCharacter().getTranslateX() + super.getMovement().getX());

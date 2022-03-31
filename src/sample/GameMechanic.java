@@ -220,7 +220,7 @@ public class GameMechanic {
         projectile.accelerate();
         projectile.setMovement(projectile.getMovement().normalize().multiply(4));
     }
-    
+
     public boolean checkForShipCollision(){
         AtomicBoolean ifTrue = new AtomicBoolean(false);
         if (alien.isAlive()){

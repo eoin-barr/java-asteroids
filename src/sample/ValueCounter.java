@@ -5,8 +5,8 @@ import javafx.scene.text.Text;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ValueCounter {
-    private AtomicInteger value;
     private Text text;
+    private AtomicInteger value;
 
     public ValueCounter(Text text){
         this.value = new AtomicInteger();

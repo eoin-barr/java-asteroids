@@ -1,22 +1,20 @@
 package sample;
 
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.text.Text;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedWriter;
 
 public class GameView {
     private Scene gameScene;
@@ -25,19 +23,18 @@ public class GameView {
     static Paint gameScreenColor;
 
     public GameView(int width, int height, Color fill){
+        gameScreenColor = fill;
         gameScreenWidth = width;
         gameScreenHeight = height;
-        gameScreenColor = fill;
     }
     
     public void setupGameView() {
         BorderPane gameView = new BorderPane();
-
         gameScene = new Scene(gameView);
         GameMechanic game = new GameMechanic(gameScene,this);
         gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
-
         Text mainMenu = new Text(10, 80, "Main Menu");
+
         mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -46,10 +43,6 @@ public class GameView {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("scenes/sample.fxml"));
-                    /*
-                     * if "fx:controller" is not set in fxml
-                     * fxmlLoader.setController(NewWindowController);
-                     */
                     Scene scene = new Scene(fxmlLoader.load(), 700, 500);
                     Stage stage2 = new Stage();
                     stage2.setTitle("Asteroids");
@@ -77,7 +70,6 @@ public class GameView {
         gameView.getChildren().add(levelsText);
         gameView.getChildren().add(livesText);
         gameView.getChildren().add(mainMenu);
-
     }
 
     public void navigateToGameOver(){
@@ -95,7 +87,6 @@ public class GameView {
             System.out.println(e);
         }
     }
-
 
     public void addScoreToFile(String score){
         try (FileWriter fw = new FileWriter("scores.txt", true);
