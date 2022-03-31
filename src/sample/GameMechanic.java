@@ -97,7 +97,9 @@ public class GameMechanic {
                 }
 
                 if (lives < 1){
+                    gameSettings.addScoreToFile(pointsCounter.getText().toString());
                     stop();
+                    gameSettings.navigateToGameOver();
                 }
 
 
@@ -107,7 +109,7 @@ public class GameMechanic {
                     level += 1;
                     for (int i = 0; i < level; i++){
                         Random rand = new Random();
-                        Asteroid newAsteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE);
+                        Asteroid newAsteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
                         if (!newAsteroid.collide(ship)) {
                             asteroids.add(newAsteroid);
                             newAsteroid.setAlive(true);
@@ -155,7 +157,7 @@ public class GameMechanic {
     public void spawnAdditionalAsteroid() {
         if (Math.random() < 0.005) {
             Random rand = new Random();
-            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE);
+            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
             if (!asteroid.collide(ship)) {
                 asteroids.add(asteroid);
                 asteroid.setAlive(true);
@@ -168,7 +170,7 @@ public class GameMechanic {
         asteroids = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
             Random rand = new Random();
-            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE);
+            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
             asteroids.add(asteroid);
             asteroid.setAlive(true);
         }
@@ -214,7 +216,7 @@ public class GameMechanic {
                         }else {
                             break;
                         }
-                        Asteroid newAsteroid = new Asteroid(x, y, size);
+                        Asteroid newAsteroid = new Asteroid(x, y, size, level);
                         if (!newAsteroid.collide(ship)) {
                             asteroids.add(newAsteroid);
                             newAsteroid.setAlive(true);

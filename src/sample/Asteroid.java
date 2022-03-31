@@ -12,18 +12,18 @@ public class Asteroid extends Character {
 
     private double rotationalMovement;
 
-    public Asteroid(int x, int y, AsteroidSize size) {
+    public Asteroid(int x, int y, AsteroidSize size, int level) {
         super(PolygonFactory.createPolygon(size), x, y);
 
         Random rand = new Random();
         int base;
-
+        level *= 2;
         if (size == AsteroidSize.LARGE){
-            base = 10;
+            base = 5;
         }else if (size == AsteroidSize.MEDIUM){
-            base = 20;
+            base = 10;
         }else {
-            base = 30;
+            base = 15;
         }
 
         super.setSize(size);
@@ -31,7 +31,7 @@ public class Asteroid extends Character {
 
         // Adjust Acceleration based on size
         super.getCharacter().setRotate(rand.nextInt(360));
-        int accelerationValue = base + rand.nextInt(5);
+        int accelerationValue = level + base + rand.nextInt(5);
         for(int i = 0; i<accelerationValue;i++){
             accelerate();
         }

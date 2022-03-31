@@ -26,7 +26,6 @@ public class GameView {
         gameScreenHeight = height;
     }
 
-    @FXML Button gameButton;
 
 
     public void setupGameView() {
@@ -36,21 +35,11 @@ public class GameView {
         gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
 
 
+
         Text mainMenu = new Text(10, 80, "Main Menu");
         mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                try (FileWriter fw = new FileWriter("scores.txt", true);
-                     BufferedWriter bw = new BufferedWriter(fw);
-                     PrintWriter out = new PrintWriter(bw))
-                {
-                    String score = "10,000";
-                    System.out.println(score);
-                    out.println(score);
-                } catch (Exception e){
-                    System.out.println(e);
-                }
-
                 Window stage = mainMenu.getScene().getWindow();
                 stage.hide();
                 try {
@@ -90,13 +79,41 @@ public class GameView {
 
     }
 
+    public void navigateToGameOver(){
+        Window stage = gameScene.getWindow();
+        stage.hide();
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("gameOver.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 700, 500);
+            Stage stage2 = new Stage();
+            stage2.setTitle("Asteroids");
+            stage2.setScene(scene);
+            stage2.show();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+
+    public void addScoreToFile(String score){
+        try (FileWriter fw = new FileWriter("scores.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(score);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
     public int getGameScreenWidth(){
         return gameScreenWidth;
     }
+
     public int getGameScreenHeight(){
         return gameScreenHeight;
     }
-
 
     public Scene getGameScene(){
         return gameScene;

@@ -28,4 +28,8 @@ public class ValueCounter {
     public void increaseLives(int livesToAdd){
         text.setText("Lives: " + value.addAndGet(livesToAdd));
     }
+
+    public AtomicInteger getText(){
+        return value;
+    }
 }

@@ -1,0 +1,18 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Text?>
+<GridPane fx:controller="sample.GameOverController"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+    <children>
+        <Text>GAME OVER</Text>
+        <Button fx:id="mainMenuButton" layoutX="277.0" layoutY="189.0" mnemonicParsing="false" onAction="#navigateMainMenu" style="-fx-background-color: #292A2D; -fx-graphic-text-gap: 44;" text="Game Over - go to main menu" textFill="#f25bb0">
+            <font>
+                <Font size="28.0" />
+            </font></Button>
+    </children>
+</GridPane>
