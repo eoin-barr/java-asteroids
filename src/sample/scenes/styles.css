@@ -1,0 +1,12 @@
+.list-view {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-control-inner-background: #0C0C0D;
+    -fx-selection-bar:#f25bb0 ;
+    -fx-selection-bar-non-focused: #0C0C0D ;
+}
+
+.list-cell, .list-cell {
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}

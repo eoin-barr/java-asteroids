@@ -11,8 +11,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import sample.AsteroidsApplication;
 
-public class Controller extends AsteroidsApplication {
-    @FXML public Button gameButton, highScoresButton, instructionsButton;
+public class GameOverController extends AsteroidsApplication {
+    @FXML public Button gameButton, mainMenuButton, highScoresButton;
 
     public void navigateGame() throws Exception {
         gameButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -26,15 +26,15 @@ public class Controller extends AsteroidsApplication {
         });
     }
 
-    public void navigateHighScores() throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("scenes/HighScores.fxml"));
-        Stage window = (Stage) highScoresButton.getScene().getWindow();
+    public void navigateMainMenu() throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("scenes/MainMenu.fxml"));
+        Stage window = (Stage) mainMenuButton.getScene().getWindow();
         window.setScene(new Scene(root, 700, 500));
     }
 
-    public void navigateInstructions() throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("scenes/Instructions.fxml"));
-        Stage window = (Stage) instructionsButton.getScene().getWindow();
+    public void navigateHighScores() throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("scenes/HighScores.fxml"));
+        Stage window = (Stage) highScoresButton.getScene().getWindow();
         window.setScene(new Scene(root, 700, 500));
     }
 
