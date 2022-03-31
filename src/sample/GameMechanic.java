@@ -1,27 +1,27 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.input.KeyCode;
+import javafx.animation.AnimationTimer;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameMechanic {
-    private GameView gameSettings;
-    private Pane gamePane;
-    private Scene gameScene;
-    private List<Character> asteroids;
-    private List<Character> projectiles;
-    private Character ship;
-    private Character alien;
-    private ValueCounter pointsCounter;
-    private ValueCounter levelsCounter;
-    private ValueCounter livesCounter;
     private int level;
     private int lives;
+    private Pane gamePane;
+    private Character ship;
+    private Character alien;
+    private Scene gameScene;
+    private GameView gameSettings;
+    private List<Character> asteroids;
+    private ValueCounter livesCounter;
+    private ValueCounter pointsCounter;
+    private ValueCounter levelsCounter;
+    private List<Character> projectiles;
 
     public GameMechanic(Scene scene, GameView gameView) {
         this.gameSettings = gameView;
@@ -31,7 +31,6 @@ public class GameMechanic {
         gamePane.setPrefSize(gameSettings.getGameScreenWidth(), gameSettings.getGameScreenHeight());
         this.gameScene = scene;
     }
-
 
     public void setupGameComponents(ValueCounter pointsCounter, ValueCounter levelsCounter, ValueCounter livesCounter) {
         this.pointsCounter = pointsCounter;
@@ -44,18 +43,15 @@ public class GameMechanic {
 
         Random rand = new Random();
         spawnInitialAsteroids();
+
         ship = new Ship(gameSettings.getGameScreenWidth() / 2, gameSettings.getGameScreenHeight() / 2);
         alien = new Alien(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), level);
         alien.setAlive(false);
         asteroids.forEach(asteroid -> gamePane.getChildren().add(asteroid.getCharacter()));
         gamePane.getChildren().add(ship.getCharacter());
-//        gamePane.getChildren().add(alien.getCharacter());
 
         Map<KeyCode, Boolean> pressedKeys = readKeyboardInput();
-
         startGame(pressedKeys);
-
-
     }
 
     public void startGame(Map<KeyCode, Boolean> pressedKeys) {
@@ -77,93 +73,93 @@ public class GameMechanic {
                     ship.hyperJump(asteroids);
                     pressedKeys.put(KeyCode.H, false);
                 }
-
-
-
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 5) {
                     Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY(), ProjectileType.SHIP);
                     projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
                     projectile.setAlive(true);
                     projectiles.add(projectile);
-
                     setProjectileSpeed(projectile);
-
                     gamePane.getChildren().add(projectile.getCharacter());
                     pressedKeys.put(KeyCode.SPACE, false);
                 }
-
-                ensureCharactersMovement();
-
-                if(checkForShipCollision()){
-                    lives -= 1;
-                    livesCounter.decreaseLives();
-                    ship.hyperJump(asteroids);
-                }
-
                 if (lives < 1){
                     gameSettings.addScoreToFile(pointsCounter.getText().toString());
                     stop();
                     gameSettings.navigateToGameOver();
                 }
 
-
-
-
-
-                if (asteroids.size() < 1){
-                    if (alien.isAlive()){
-                        alien.setAlive(false);
-                        gamePane.getChildren().remove(alien.getCharacter());
-                    }
-
-                    levelsCounter.increaseLevel();
-                    level += 1;
-                    for (int i = 0; i < level; i++){
-                        Random rand = new Random();
-                        Asteroid newAsteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
-                        if (!newAsteroid.collide(ship)) {
-                            asteroids.add(newAsteroid);
-                            newAsteroid.setAlive(true);
-                            gamePane.getChildren().add(newAsteroid.getCharacter());
-                        }
-                    }
-
-                }
-
-                if (!alien.isAlive()){
-                    spawnAlien();
-                } else {
-                    if (Math.random() < 0.007){
-                        Projectile projectile = new Projectile((int) alien.getCharacter().getTranslateX(), (int) alien.getCharacter().getTranslateY(), ProjectileType.ALIEN);
-
-                        double nextX = ship.getCharacter().getTranslateX();
-                        double currentX = alien.getCharacter().getTranslateX();
-                        double nextY = ship.getCharacter().getTranslateY();
-                        double currentY = alien.getCharacter().getTranslateY();
-                        double deltaX = nextX - currentX;
-                        double deltaY = nextY - currentY;
-                        double theta = Math.atan2(deltaY, deltaX);
-                        projectile.getCharacter().setRotate(theta*180/Math.PI);
-
-                        projectile.setAlive(true);
-                        projectiles.add(projectile);
-                        setProjectileSpeed(projectile);
-                        gamePane.getChildren().add(projectile.getCharacter());
-                    }
-                }
-
-
-
-
+                ensureCharactersMovement();
+                handleShipCollision();
+                levelUp();
+                handleAlienCreation();
                 deleteDeadCharacters(projectiles);
                 deleteDeadCharacters(asteroids);
-//                spawnAdditionalAsteroid();
-
                 checkForProjectileCollision();
-
-
             }
         }.start();
+    }
+
+    public void ensureCharactersMovement() {
+        if (alien.isAlive()){
+            alien.move();
+        }
+        ship.move();
+        asteroids.forEach(asteroid -> asteroid.move());
+        projectiles.forEach(projectile -> projectile.move());
+    }
+
+    public void handleShipCollision(){
+        if(checkForShipCollision()){
+            lives -= 1;
+            livesCounter.decreaseLives();
+            ship.hyperJump(asteroids);
+        }
+    }
+
+    public void levelUp(){
+        if (asteroids.size() < 1){
+            if (alien.isAlive()){
+                alien.setAlive(false);
+                gamePane.getChildren().remove(alien.getCharacter());
+            }
+            levelsCounter.increaseLevel();
+            level += 1;
+            for (int i = 0; i < level; i++){
+                Random rand = new Random();
+                Asteroid newAsteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
+                if (!newAsteroid.collide(ship)) {
+                    asteroids.add(newAsteroid);
+                    newAsteroid.setAlive(true);
+                    gamePane.getChildren().add(newAsteroid.getCharacter());
+                }
+            }
+        }
+    }
+
+    public void handleAlienCreation(){
+        if (!alien.isAlive()){
+            spawnAlien();
+        } else {
+            if (Math.random() < 0.007){
+                createAlienProjectile();
+            }
+        }
+    }
+
+    public void createAlienProjectile(){
+        Projectile projectile = new Projectile((int) alien.getCharacter().getTranslateX(), (int) alien.getCharacter().getTranslateY(), ProjectileType.ALIEN);
+        double nextX = ship.getCharacter().getTranslateX();
+        double currentX = alien.getCharacter().getTranslateX();
+        double nextY = ship.getCharacter().getTranslateY();
+        double currentY = alien.getCharacter().getTranslateY();
+        double deltaX = nextX - currentX;
+        double deltaY = nextY - currentY;
+        double theta = Math.atan2(deltaY, deltaX);
+        projectile.getCharacter().setRotate(theta*180/Math.PI);
+        projectile.setAlive(true);
+        projectiles.add(projectile);
+        setProjectileSpeed(projectile);
+        gamePane.getChildren().add(projectile.getCharacter());
     }
 
     public void deleteDeadCharacters(List<Character> listOfCharacters) {
@@ -224,16 +220,7 @@ public class GameMechanic {
         projectile.accelerate();
         projectile.setMovement(projectile.getMovement().normalize().multiply(4));
     }
-
-    public void ensureCharactersMovement() {
-        if (alien.isAlive()){
-            alien.move();
-        }
-        ship.move();
-        asteroids.forEach(asteroid -> asteroid.move());
-        projectiles.forEach(projectile -> projectile.move());
-    }
-
+    
     public boolean checkForShipCollision(){
         AtomicBoolean ifTrue = new AtomicBoolean(false);
         if (alien.isAlive()){
