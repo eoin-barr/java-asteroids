@@ -16,6 +16,7 @@ public class GameMechanic {
     private List<Character> asteroids;
     private List<Character> projectiles;
     private Character ship;
+    private Character alien;
     private ValueCounter pointsCounter;
     private ValueCounter levelsCounter;
     private ValueCounter livesCounter;
@@ -41,11 +42,14 @@ public class GameMechanic {
         this.level = 1;
         this.lives = 2;
 
+        Random rand = new Random();
         spawnInitialAsteroids();
-
         ship = new Ship(gameSettings.getGameScreenWidth() / 2, gameSettings.getGameScreenHeight() / 2);
+        alien = new Alien(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), level);
+        alien.setAlive(false);
         asteroids.forEach(asteroid -> gamePane.getChildren().add(asteroid.getCharacter()));
         gamePane.getChildren().add(ship.getCharacter());
+//        gamePane.getChildren().add(alien.getCharacter());
 
         Map<KeyCode, Boolean> pressedKeys = readKeyboardInput();
 
@@ -77,7 +81,7 @@ public class GameMechanic {
 
 
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 5) {
-                    Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY());
+                    Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY(), ProjectileType.SHIP);
                     projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
                     projectile.setAlive(true);
                     projectiles.add(projectile);
@@ -104,7 +108,14 @@ public class GameMechanic {
 
 
 
+
+
                 if (asteroids.size() < 1){
+                    if (alien.isAlive()){
+                        alien.setAlive(false);
+                        gamePane.getChildren().remove(alien.getCharacter());
+                    }
+
                     levelsCounter.increaseLevel();
                     level += 1;
                     for (int i = 0; i < level; i++){
@@ -118,6 +129,30 @@ public class GameMechanic {
                     }
 
                 }
+
+                if (!alien.isAlive()){
+                    spawnAlien();
+                } else {
+                    if (Math.random() < 0.007){
+                        Projectile projectile = new Projectile((int) alien.getCharacter().getTranslateX(), (int) alien.getCharacter().getTranslateY(), ProjectileType.ALIEN);
+
+                        double nextX = ship.getCharacter().getTranslateX();
+                        double currentX = alien.getCharacter().getTranslateX();
+                        double nextY = ship.getCharacter().getTranslateY();
+                        double currentY = alien.getCharacter().getTranslateY();
+                        double deltaX = nextX - currentX;
+                        double deltaY = nextY - currentY;
+                        double theta = Math.atan2(deltaY, deltaX);
+                        projectile.getCharacter().setRotate(theta*180/Math.PI);
+
+                        projectile.setAlive(true);
+                        projectiles.add(projectile);
+                        setProjectileSpeed(projectile);
+                        gamePane.getChildren().add(projectile.getCharacter());
+                    }
+                }
+
+
 
 
                 deleteDeadCharacters(projectiles);
@@ -166,6 +201,15 @@ public class GameMechanic {
         }
     }
 
+    public void spawnAlien(){
+        if (Math.random() < 0.003){
+            Random rand = new Random();
+            alien = new Alien(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), level);
+            alien.setAlive(true);
+            gamePane.getChildren().add(alien.getCharacter());
+        }
+    }
+
     public void spawnInitialAsteroids() {
         asteroids = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
@@ -182,6 +226,9 @@ public class GameMechanic {
     }
 
     public void ensureCharactersMovement() {
+        if (alien.isAlive()){
+            alien.move();
+        }
         ship.move();
         asteroids.forEach(asteroid -> asteroid.move());
         projectiles.forEach(projectile -> projectile.move());
@@ -189,8 +236,19 @@ public class GameMechanic {
 
     public boolean checkForShipCollision(){
         AtomicBoolean ifTrue = new AtomicBoolean(false);
+        if (alien.isAlive()){
+            if (alien.collide(ship)){
+                ifTrue.set(true);
+            }
+        }
         asteroids.forEach(asteroid -> {
             if (asteroid.collide(ship)) {
+                ifTrue.set(true);
+            }
+        });
+        projectiles.forEach(projectile -> {
+            if (projectile.getProjectileType() == ProjectileType.ALIEN && projectile.collide(ship)){
+                projectile.setAlive(false);
                 ifTrue.set(true);
             }
         });
@@ -199,8 +257,16 @@ public class GameMechanic {
 
     public void checkForProjectileCollision(){
         projectiles.forEach(projectile -> {
+            if (alien.isAlive()){
+                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(alien)){
+                    alien.setAlive(false);
+                    projectile.setAlive(false);
+                    pointsCounter.increasePoints(1500);
+                    gamePane.getChildren().remove(alien.getCharacter());
+                }
+            }
             asteroids.forEach(asteroid -> {
-                if (projectile.collide(asteroid)) {
+                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(asteroid)) {
                     projectile.setAlive(false);
                     int x = (int) asteroid.getCharacter().getTranslateX();
                     int y = (int) asteroid.getCharacter().getTranslateY();
@@ -223,7 +289,9 @@ public class GameMechanic {
                             gamePane.getChildren().add(newAsteroid.getCharacter());
                         }
                     }
-
+                }
+                if (projectile.getProjectileType() == ProjectileType.ALIEN && projectile.collide(asteroid)){
+                    projectile.setAlive(false);
                 }
             });
         });

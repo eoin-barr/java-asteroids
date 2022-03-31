@@ -3,6 +3,7 @@ package sample;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class AsteroidsApplication extends Application {
@@ -11,7 +12,7 @@ public class AsteroidsApplication extends Application {
 
     @Override
     public void start(Stage window) {
-        GameView gameView = new GameView(700, 500);
+        GameView gameView = new GameView(700, 500, Color.BLACK);
         gameView.setupGameView();
 
         window.setTitle("Asteroids");

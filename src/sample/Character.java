@@ -2,6 +2,7 @@ package sample;
 
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
@@ -14,12 +15,15 @@ public abstract class Character {
     private Point2D movement;
     private boolean alive;
     private AsteroidSize size;
+    private ProjectileType projectileType;
 
     public Character(Polygon polygon, int x, int y) {
         this.character = polygon;
         this.character.setTranslateX(x);
         this.character.setTranslateY(y);
         this.movement = new Point2D(0, 0);
+        this.character.setFill(Color.HOTPINK);
+        this.character.setStroke(Color.HOTPINK);
     }
 
     public Polygon getCharacter() {
@@ -127,5 +131,13 @@ public abstract class Character {
 
     public AsteroidSize getSize(){
         return this.size;
+    }
+
+    public void setAsteroidType(ProjectileType type){
+        this.projectileType = type;
+    }
+
+    public ProjectileType getProjectileType(){
+        return this.projectileType;
     }
 }

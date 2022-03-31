@@ -2,10 +2,17 @@ package sample;
 
 import javafx.scene.shape.Polygon;
 
+enum ProjectileType {
+    SHIP,
+    ALIEN
+}
+
 public class Projectile extends Character{
-    public Projectile(int x, int y){
+    public Projectile(int x, int y, ProjectileType type){
         super(new Polygon(2, -2, 2, 2, -2, 2, -2, -2), x, y);
+        super.setAsteroidType(type);
     }
+
 
     @Override
     public void move() {

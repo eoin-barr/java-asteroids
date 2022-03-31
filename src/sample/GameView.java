@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -20,21 +22,20 @@ public class GameView {
     private Scene gameScene;
     static int gameScreenWidth;
     static int gameScreenHeight;
+    static Paint gameScreenColor;
 
-    public GameView(int width, int height){
+    public GameView(int width, int height, Color fill){
         gameScreenWidth = width;
         gameScreenHeight = height;
+        gameScreenColor = fill;
     }
-
-
-
+    
     public void setupGameView() {
         BorderPane gameView = new BorderPane();
+
         gameScene = new Scene(gameView);
         GameMechanic game = new GameMechanic(gameScene,this);
         gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
-
-
 
         Text mainMenu = new Text(10, 80, "Main Menu");
         mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -44,7 +45,7 @@ public class GameView {
                 stage.hide();
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("sample.fxml"));
+                    fxmlLoader.setLocation(getClass().getResource("scenes/sample.fxml"));
                     /*
                      * if "fx:controller" is not set in fxml
                      * fxmlLoader.setController(NewWindowController);
