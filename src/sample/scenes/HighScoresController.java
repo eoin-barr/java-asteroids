@@ -11,14 +11,11 @@ import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 
 import java.net.URL;
-import java.util.List;
+import java.util.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.math.BigInteger;
-import java.util.Collections;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class HighScoresController implements Initializable{
