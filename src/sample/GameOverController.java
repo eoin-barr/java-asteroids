@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 public class GameOverController extends AsteroidsApp {
     @FXML public Button gameButton, mainMenuButton, highScoresButton;
 
+    // Method which handles gameButton clicks and runs the AsteroidsApp
     public void navigateGame() throws Exception {
         gameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -25,12 +26,14 @@ public class GameOverController extends AsteroidsApp {
         });
     }
 
+    // Method which handles mainMenuButton clicks and navigates to the MainMenu screen
     public void navigateMainMenu() throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("scenes/MainMenu.fxml"));
         Stage window = (Stage) mainMenuButton.getScene().getWindow();
         window.setScene(new Scene(root, 700, 500));
     }
 
+    // Method which handles highScoresButton clicks and navigates to the HighScore screen
     public void navigateHighScores() throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("scenes/HighScores.fxml"));
         Stage window = (Stage) highScoresButton.getScene().getWindow();
