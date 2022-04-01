@@ -4,7 +4,7 @@ import javafx.scene.shape.Polygon;
 
 import java.util.Random;
 
-public class PolygonFactory {
+public class PolygonBuilder {
 
     public static Polygon createPolygon(AsteroidSize asteroidSize) {
         Random rnd = new Random();

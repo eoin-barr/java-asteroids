@@ -9,7 +9,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GameMechanic {
+public class GameFunctionality {
+    // Initialise game variables
     private int level;
     private int lives;
     private Pane gamePane;
@@ -23,7 +24,8 @@ public class GameMechanic {
     private ValueCounter levelsCounter;
     private List<Character> projectiles;
 
-    public GameMechanic(Scene scene, GameView gameView) {
+    public GameFunctionality(Scene scene, GameView gameView) {
+        // Assign game variables
         this.gameSettings = gameView;
         asteroids = new ArrayList<>();
         projectiles = new ArrayList<>();
@@ -32,7 +34,8 @@ public class GameMechanic {
         this.gameScene = scene;
     }
 
-    public void setupGameComponents(ValueCounter pointsCounter, ValueCounter levelsCounter, ValueCounter livesCounter) {
+    public void configureGameComponents(ValueCounter pointsCounter, ValueCounter levelsCounter, ValueCounter livesCounter) {
+        // Assign game variables
         this.pointsCounter = pointsCounter;
         this.levelsCounter = levelsCounter;
         this.livesCounter = livesCounter;
@@ -50,29 +53,33 @@ public class GameMechanic {
         asteroids.forEach(asteroid -> gamePane.getChildren().add(asteroid.getCharacter()));
         gamePane.getChildren().add(ship.getCharacter());
 
-        Map<KeyCode, Boolean> pressedKeys = readKeyboardInput();
+        //Capture keyboard input
+        Map<KeyCode, Boolean> pressedKeys = captureKeyboardInput();
         startGame(pressedKeys);
     }
 
+    // Primary method where all the other game methods are run
     public void startGame(Map<KeyCode, Boolean> pressedKeys) {
         new AnimationTimer() {
             public void handle(long now) {
+                // If left arrow key is pressed the ship turns left
                 if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
                     ship.turnLeft();
                 }
+                // If right arrow key is pressed the ship turns right
                 if (pressedKeys.getOrDefault(KeyCode.RIGHT, false)) {
                     ship.turnRight();
                 }
+                // If up arrow key is pressed the ship accelerates
                 if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
                     ship.accelerate();
                 }
-                if (pressedKeys.getOrDefault(KeyCode.DOWN, false)) {
-                    ship.decelerate();
-                }
+                // If h key is pressed the ship hyperSpace jumps
                 if (pressedKeys.getOrDefault(KeyCode.H, false)){
                     ship.hyperJump(asteroids);
                     pressedKeys.put(KeyCode.H, false);
                 }
+                // If space bar is pressed and there are less than 5 projectiles on the screen an projectile is created
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 5) {
                     Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY(), ProjectileType.SHIP);
                     projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
@@ -82,13 +89,18 @@ public class GameMechanic {
                     gamePane.getChildren().add(projectile.getCharacter());
                     pressedKeys.put(KeyCode.SPACE, false);
                 }
+
+                // Triggered when user has no lives left
                 if (lives < 1){
+                    // Score is appended to the scores.txt file
                     gameSettings.addScoreToFile(pointsCounter.getText().toString());
+                    // The game loop is stopped
                     stop();
+                    // The Game over screen is opened
                     gameSettings.navigateToGameOver();
                 }
 
-                ensureCharactersMovement();
+                guaranteeCharactersMovement();
                 handleShipCollision();
                 levelUp();
                 handleAlienCreation();
@@ -99,7 +111,8 @@ public class GameMechanic {
         }.start();
     }
 
-    public void ensureCharactersMovement() {
+    // Method ensures that alien, ship, asteroids and projectiles move correctly
+    public void guaranteeCharactersMovement() {
         if (alien.isAlive()){
             alien.move();
         }
@@ -108,6 +121,7 @@ public class GameMechanic {
         projectiles.forEach(projectile -> projectile.move());
     }
 
+    // Method handles logic of a ship collision
     public void handleShipCollision(){
         if(checkForShipCollision()){
             lives -= 1;
@@ -116,6 +130,7 @@ public class GameMechanic {
         }
     }
 
+    // Method handles the logic when a user levels up
     public void levelUp(){
         if (asteroids.size() < 1){
             if (alien.isAlive()){
@@ -136,6 +151,7 @@ public class GameMechanic {
         }
     }
 
+    // Method handles alien creation
     public void handleAlienCreation(){
         if (!alien.isAlive()){
             spawnAlien();
@@ -146,6 +162,7 @@ public class GameMechanic {
         }
     }
 
+    // Method creates an alien projectile
     public void createAlienProjectile(){
         Projectile projectile = new Projectile((int) alien.getCharacter().getTranslateX(), (int) alien.getCharacter().getTranslateY(), ProjectileType.ALIEN);
         double nextX = ship.getCharacter().getTranslateX();
@@ -162,6 +179,7 @@ public class GameMechanic {
         gamePane.getChildren().add(projectile.getCharacter());
     }
 
+    // Method removes dead characters from the gamePane
     public void deleteDeadCharacters(List<Character> listOfCharacters) {
         listOfCharacters.stream()
                 .filter(character -> !character.isAlive())
@@ -173,7 +191,8 @@ public class GameMechanic {
                 .collect(Collectors.toList()));
     }
 
-    public Map<KeyCode, Boolean> readKeyboardInput() {
+    // Method captures a users input
+    public Map<KeyCode, Boolean> captureKeyboardInput() {
         Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
         gameScene.setOnKeyPressed(keyEvent -> {
             pressedKeys.put(keyEvent.getCode(), true);
@@ -185,18 +204,7 @@ public class GameMechanic {
         return pressedKeys;
     }
 
-    public void spawnAdditionalAsteroid() {
-        if (Math.random() < 0.005) {
-            Random rand = new Random();
-            Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
-            if (!asteroid.collide(ship)) {
-                asteroids.add(asteroid);
-                asteroid.setAlive(true);
-                gamePane.getChildren().add(asteroid.getCharacter());
-            }
-        }
-    }
-
+    // Method spawns an alien
     public void spawnAlien(){
         if (Math.random() < 0.003){
             Random rand = new Random();
@@ -206,6 +214,7 @@ public class GameMechanic {
         }
     }
 
+    // Method spawns initials asteroids to the screen
     public void spawnInitialAsteroids() {
         asteroids = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
@@ -216,11 +225,13 @@ public class GameMechanic {
         }
     }
 
+    // Method sets speed of a projectile
     public void setProjectileSpeed(Character projectile) {
         projectile.accelerate();
         projectile.setMovement(projectile.getMovement().normalize().multiply(4));
     }
 
+    // Method checks for a ship collision
     public boolean checkForShipCollision(){
         AtomicBoolean ifTrue = new AtomicBoolean(false);
         if (alien.isAlive()){
@@ -242,6 +253,7 @@ public class GameMechanic {
         return ifTrue.get();
     }
 
+    // Method checks for an asteroid collision
     public void checkForProjectileCollision(){
         projectiles.forEach(projectile -> {
             if (alien.isAlive()){
@@ -371,8 +383,7 @@ public class GameMechanic {
         });
     }
 
-
-
+    // Method returns a score depending on the size of the asteroid
     public int getScore(AsteroidSize size){
         if (size == AsteroidSize.LARGE){
             return 200;
@@ -383,6 +394,7 @@ public class GameMechanic {
         }
     }
 
+    // Method returns the gamePane
     public Pane getGamePane() {
         return gamePane;
     }

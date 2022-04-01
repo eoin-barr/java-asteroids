@@ -9,17 +9,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import sample.AsteroidsApplication;
 
-public class GameOverController extends AsteroidsApplication {
+public class GameOverController extends AsteroidsApp {
     @FXML public Button gameButton, mainMenuButton, highScoresButton;
 
     public void navigateGame() throws Exception {
         gameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                AsteroidsApplication aa = new AsteroidsApplication();
-                aa.start(AsteroidsApplication.classStage);
+                AsteroidsApp aa = new AsteroidsApp();
+                aa.start(AsteroidsApp.classStage);
                 Window stage = gameButton.getScene().getWindow();
                 stage.hide();
             }

@@ -5,8 +5,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -20,10 +18,8 @@ public class GameView {
     private Scene gameScene;
     static int gameScreenWidth;
     static int gameScreenHeight;
-    static Paint gameScreenColor;
 
-    public GameView(int width, int height, Color fill){
-        gameScreenColor = fill;
+    public GameView(int width, int height){
         gameScreenWidth = width;
         gameScreenHeight = height;
     }
@@ -31,7 +27,7 @@ public class GameView {
     public void setupGameView() {
         BorderPane gameView = new BorderPane();
         gameScene = new Scene(gameView);
-        GameMechanic game = new GameMechanic(gameScene,this);
+        GameFunctionality game = new GameFunctionality(gameScene,this);
         gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
         Text mainMenu = new Text(10, 80, "Main Menu");
 
@@ -63,7 +59,7 @@ public class GameView {
         Text livesText = new Text(10, 60, "Lives: 0");
         ValueCounter livesCounter = new ValueCounter(livesText);
 
-        game.setupGameComponents(pointsCounter, levelsCounter, livesCounter);
+        game.configureGameComponents(pointsCounter, levelsCounter, livesCounter);
 
         gameView.getChildren().add(game.getGamePane());
         gameView.getChildren().add(pointText);

@@ -26,7 +26,6 @@ public class HighScoresController implements Initializable{
         List<String> myList;
         try{
             myList = Files.lines(Paths.get("scores.txt")).collect(Collectors.toList());
-//            fxmlList.setStyle("-fx-control-inner-background: black; -fx-background-radius: 20;");
             fxmlList.setItems(FXCollections.observableArrayList(sortData(myList)));
 
         }catch (IOException e){
