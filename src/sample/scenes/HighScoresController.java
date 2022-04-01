@@ -1,23 +1,23 @@
 package sample.scenes;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.stage.Stage;
+import javafx.collections.FXCollections;
 
-import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URL;
+import java.util.List;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.math.BigInteger;
 import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
