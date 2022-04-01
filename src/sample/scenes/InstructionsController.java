@@ -11,8 +11,9 @@ import javafx.scene.control.Button;
 public class InstructionsController {
     @FXML private Button mainMenuButton;
 
+    // Method which handles mainMenuButton clicks and navigates to the MainMenu screen
     public void navigateMainMenu() throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("mainmenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
         Stage window = (Stage) mainMenuButton.getScene().getWindow();
         window.setScene(new Scene(root, 700, 500));
     }

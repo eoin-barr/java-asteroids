@@ -10,7 +10,10 @@ enum ProjectileType {
 
 public class Projectile extends Character{
     public Projectile(int x, int y, ProjectileType type){
+        // Creates a new projectile
         super(new Polygon(2, -2, 2, 2, -2, 2, -2, -2), x, y, Color.BLACK);
+
+        // Setting the projectile type
         super.setProjectileType(type);
     }
 
@@ -19,19 +22,22 @@ public class Projectile extends Character{
         super.getCharacter().setTranslateX(super.getCharacter().getTranslateX() + super.getMovement().getX());
         super.getCharacter().setTranslateY(super.getCharacter().getTranslateY() + super.getMovement().getY());
 
-        // Removes projectiles once it leaves the bounds bounds of the window
+        // Removes projectile if leaves right side of the game screen
         if(super.getCharacter().getTranslateX()>GameView.gameScreenWidth){
             setAlive(false);
         }
 
+        // Removes projectile if leaves left side of the game screen
         if(super.getCharacter().getTranslateX()<0){
             setAlive(false);
         }
 
+        // Removes projectile if leaves top of the game screen
         if(super.getCharacter().getTranslateY()>GameView.gameScreenHeight){
             setAlive(false);
         }
 
+        // Removes projectile if leaves bottom of the game screen
         if(super.getCharacter().getTranslateY()<0){
             setAlive(false);
         }

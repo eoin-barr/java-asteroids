@@ -8,6 +8,7 @@ import javafx.application.Application;
 
 public class Main extends Application {
 
+    // Method opens the MainMenu screen
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("scenes/MainMenu.fxml"));

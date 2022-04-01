@@ -15,7 +15,7 @@ public class Asteroid extends Character {
     private double rotationalMovement;
 
     public Asteroid(int x, int y, AsteroidSize size, int level) {
-        // Create a new asteroid
+        // Creates a new asteroid
         super(PolygonBuilder.createPolygon(size), x, y, Color.GREY);
 
         // Setting the size
