@@ -3,13 +3,12 @@ package sample;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 import java.util.List;
 import java.util.Random;
 
-public abstract class Character {
+public abstract class Character implements Char {
 
     private boolean alive;
     private Point2D movement;

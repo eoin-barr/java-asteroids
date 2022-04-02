@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.BufferedWriter;
 
-public class GameView {
+public class GameView implements Game {
     private Scene gameScene;
     static int gameScreenWidth;
     static int gameScreenHeight;

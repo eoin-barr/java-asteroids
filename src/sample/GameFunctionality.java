@@ -79,6 +79,13 @@ public class GameFunctionality {
                     ship.hyperJump(asteroids);
                     pressedKeys.put(KeyCode.H, false);
                 }
+                // If q is pressed the game is terminated (score is not appended to score file)
+                if (pressedKeys.getOrDefault(KeyCode.Q, false)){
+                    // Game loop is terminated
+                    stop();
+                    // The Game over screen is opened
+                    gameSettings.navigateToGameOver();
+                }
                 // If space bar is pressed and there are less than 5 projectiles on the screen an projectile is created
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 5) {
                     Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY(), ProjectileType.SHIP);
@@ -253,6 +260,22 @@ public class GameFunctionality {
         return ifTrue.get();
     }
 
+    // Method returns a score depending on the size of the asteroid
+    public int getScore(AsteroidSize size){
+        if (size == AsteroidSize.LARGE){
+            return 200;
+        }else if (size == AsteroidSize.MEDIUM){
+            return 500;
+        }else {
+            return 1000;
+        }
+    }
+
+    // Method returns the gamePane
+    public Pane getGamePane() {
+        return gamePane;
+    }
+
     // Method checks for an asteroid collision
     public void checkForProjectileCollision(){
         projectiles.forEach(projectile -> {
@@ -296,106 +319,93 @@ public class GameFunctionality {
         });
     }
 
-    public void checkForProjectileCollision2(){
-        for (Iterator<Character> p = projectiles.iterator(); p.hasNext();){
-            Character projectile = p.next();
-            if (alien.isAlive()){
-                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(alien)){
-                    alien.setAlive(false);
-                    projectile.setAlive(false);
-                    pointsCounter.increasePoints(1500);
-                    gamePane.getChildren().remove(alien.getCharacter());
-                }
-            }
-            for (Iterator<Character> a = asteroids.iterator(); a.hasNext();){
-                Character asteroid = a.next();
-                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(asteroid)){
-                    projectile.setAlive(false);
-                    int x = (int) asteroid.getCharacter().getTranslateX();
-                    int y = (int) asteroid.getCharacter().getTranslateY();
-                    AsteroidSize asteroidSize = asteroid.getSize();
-                    asteroid.setAlive(false);
-                    pointsCounter.increasePoints(getScore(asteroid.getSize()));
-                    AsteroidSize size;
-                    for (int i = 0; i < 2; i++){
-                        if (asteroidSize == AsteroidSize.LARGE){
-                            size = AsteroidSize.MEDIUM;
-                        }else if (asteroidSize == AsteroidSize.MEDIUM){
-                            size = AsteroidSize.SMALL;
-                        }else {
-                            break;
-                        }
-                        Asteroid newAsteroid = new Asteroid(x, y, size, level);
-                        if (!newAsteroid.collide(ship)){
-                            asteroids.add(newAsteroid);
-                            newAsteroid.setAlive(true);
-                            gamePane.getChildren().add(newAsteroid.getCharacter());
-                        }
-                    }
-                }
-                if (projectile.getProjectileType() == ProjectileType.ALIEN && projectile.collide(asteroid)){
-                    projectile.setAlive(false);
-                }
-            }
-        }
-    }
+    //// Attempt to use Iterator to fix warnings in console when an asteroid is broken up
+//    public void checkForProjectileCollision2(){
+//        for (Iterator<Character> p = projectiles.iterator(); p.hasNext();){
+//            Character projectile = p.next();
+//            if (alien.isAlive()){
+//                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(alien)){
+//                    alien.setAlive(false);
+//                    projectile.setAlive(false);
+//                    pointsCounter.increasePoints(1500);
+//                    gamePane.getChildren().remove(alien.getCharacter());
+//                }
+//            }
+//            for (Iterator<Character> a = asteroids.iterator(); a.hasNext();){
+//                Character asteroid = a.next();
+//                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(asteroid)){
+//                    projectile.setAlive(false);
+//                    int x = (int) asteroid.getCharacter().getTranslateX();
+//                    int y = (int) asteroid.getCharacter().getTranslateY();
+//                    AsteroidSize asteroidSize = asteroid.getSize();
+//                    asteroid.setAlive(false);
+//                    pointsCounter.increasePoints(getScore(asteroid.getSize()));
+//                    AsteroidSize size;
+//                    for (int i = 0; i < 2; i++){
+//                        if (asteroidSize == AsteroidSize.LARGE){
+//                            size = AsteroidSize.MEDIUM;
+//                        }else if (asteroidSize == AsteroidSize.MEDIUM){
+//                            size = AsteroidSize.SMALL;
+//                        }else {
+//                            break;
+//                        }
+//                        Asteroid newAsteroid = new Asteroid(x, y, size, level);
+//                        if (!newAsteroid.collide(ship)){
+//                            asteroids.add(newAsteroid);
+//                            newAsteroid.setAlive(true);
+//                            gamePane.getChildren().add(newAsteroid.getCharacter());
+//                        }
+//                    }
+//                }
+//                if (projectile.getProjectileType() == ProjectileType.ALIEN && projectile.collide(asteroid)){
+//                    projectile.setAlive(false);
+//                }
+//            }
+//        }
+//    }
 
-    public void checkForProjectileCollision3(List<Character> asteroids, List <Character> projectiles){
-        projectiles.stream().forEach(projectile -> {
-            if (alien.isAlive()){
-                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(alien)){
-                    alien.setAlive(false);
-                    projectile.setAlive(false);
-                    pointsCounter.increasePoints(1500);
-                    gamePane.getChildren().remove(alien.getCharacter());
-                }
-            }
-            asteroids.stream()
-                    .forEach(asteroid -> {
-                        if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(asteroid)) {
-                            projectile.setAlive(false);
-                            int x = (int) asteroid.getCharacter().getTranslateX();
-                            int y = (int) asteroid.getCharacter().getTranslateY();
-                            AsteroidSize asteroidSize = asteroid.getSize();
-                            asteroid.setAlive(false);
-                            pointsCounter.increasePoints(getScore(asteroid.getSize()));
-                            AsteroidSize size;
-                            for (int i = 0; i < 2; i++){
-                                if (asteroidSize == AsteroidSize.LARGE){
-                                    size = AsteroidSize.MEDIUM;
-                                }else if (asteroidSize == AsteroidSize.MEDIUM){
-                                    size = AsteroidSize.SMALL;
-                                }else {
-                                    break;
-                                }
-                                Asteroid newAsteroid = new Asteroid(x, y, size, level);
-                                if (!newAsteroid.collide(ship)) {
-                                    asteroids.add(newAsteroid);
-                                    newAsteroid.setAlive(true);
-                                    gamePane.getChildren().add(newAsteroid.getCharacter());
-                                }
-                            }
-                        }
-                        if (projectile.getProjectileType() == ProjectileType.ALIEN && projectile.collide(asteroid)){
-                            projectile.setAlive(false);
-                        }
-                    });
-        });
-    }
+    //// Attempt to use streams to fix warnings in console when an asteroid is broken up
+//    public void checkForProjectileCollision3(List<Character> asteroids, List <Character> projectiles){
+//        projectiles.stream().forEach(projectile -> {
+//            if (alien.isAlive()){
+//                if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(alien)){
+//                    alien.setAlive(false);
+//                    projectile.setAlive(false);
+//                    pointsCounter.increasePoints(1500);
+//                    gamePane.getChildren().remove(alien.getCharacter());
+//                }
+//            }
+//            asteroids.stream()
+//                    .forEach(asteroid -> {
+//                        if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(asteroid)) {
+//                            projectile.setAlive(false);
+//                            int x = (int) asteroid.getCharacter().getTranslateX();
+//                            int y = (int) asteroid.getCharacter().getTranslateY();
+//                            AsteroidSize asteroidSize = asteroid.getSize();
+//                            asteroid.setAlive(false);
+//                            pointsCounter.increasePoints(getScore(asteroid.getSize()));
+//                            AsteroidSize size;
+//                            for (int i = 0; i < 2; i++){
+//                                if (asteroidSize == AsteroidSize.LARGE){
+//                                    size = AsteroidSize.MEDIUM;
+//                                }else if (asteroidSize == AsteroidSize.MEDIUM){
+//                                    size = AsteroidSize.SMALL;
+//                                }else {
+//                                    break;
+//                                }
+//                                Asteroid newAsteroid = new Asteroid(x, y, size, level);
+//                                if (!newAsteroid.collide(ship)) {
+//                                    asteroids.add(newAsteroid);
+//                                    newAsteroid.setAlive(true);
+//                                    gamePane.getChildren().add(newAsteroid.getCharacter());
+//                                }
+//                            }
+//                        }
+//                        if (projectile.getProjectileType() == ProjectileType.ALIEN && projectile.collide(asteroid)){
+//                            projectile.setAlive(false);
+//                        }
+//                    });
+//        });
+//    }
 
-    // Method returns a score depending on the size of the asteroid
-    public int getScore(AsteroidSize size){
-        if (size == AsteroidSize.LARGE){
-            return 200;
-        }else if (size == AsteroidSize.MEDIUM){
-            return 500;
-        }else {
-            return 1000;
-        }
-    }
-
-    // Method returns the gamePane
-    public Pane getGamePane() {
-        return gamePane;
-    }
 }

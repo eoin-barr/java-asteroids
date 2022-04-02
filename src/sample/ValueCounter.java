@@ -4,7 +4,7 @@ import javafx.scene.text.Text;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ValueCounter {
+public class ValueCounter implements Counter {
     private Text text;
     private AtomicInteger value;
 
