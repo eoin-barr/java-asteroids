@@ -4,12 +4,6 @@ import javafx.scene.paint.Color;
 
 import java.util.Random;
 
-enum AsteroidSize {
-    SMALL,
-    MEDIUM,
-    LARGE
-}
-
 public class Asteroid extends Character {
 
     private double rotationalMovement;
