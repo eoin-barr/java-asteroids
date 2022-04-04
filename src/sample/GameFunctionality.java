@@ -112,7 +112,12 @@ public class GameFunctionality {
 
                 
                 // Put try catch here to catch the error
-                checkForProjectileCollision();
+                try {
+                    checkForProjectileCollision();
+
+                }catch (Exception e){
+                    System.out.println(e);
+                }
 
             }
         }.start();
