@@ -4,9 +4,9 @@ import javafx.scene.paint.Color;
 
 import java.util.Random;
 
-public class Asteroid extends Character {
+public class Asteroid extends Component {
 
-    private double rotationalMovement;
+    final double asteroidRotationalMovement;
 
     public Asteroid(int x, int y, AsteroidSize size, int level) {
         // Creates a new asteroid
@@ -16,7 +16,7 @@ public class Asteroid extends Character {
         super.setSize(size);
 
         // Provide random component to the asteroids acceleration
-        Random rand = new Random();
+        Random random = new Random();
 
         // level increases the acceleration of the asteroid based on the level
         level *= 2;
@@ -33,17 +33,17 @@ public class Asteroid extends Character {
         }
 
         // Giving the asteroid a random rotation
-        super.getCharacter().setRotate(rand.nextInt(360));
-        int accelerationValue = level + base + rand.nextInt(5);
+        super.getComponent().setRotate(random.nextInt(360));
+        int accelerationValue = level + base + random.nextInt(5);
         for(int i = 0; i<accelerationValue;i++){
             accelerate();
         }
         // Giving the asteroid a random rotational movement
-        this.rotationalMovement = 0.5-rand.nextDouble();
+        this.asteroidRotationalMovement = 0.5 - random.nextDouble();
     }
 
     public void move(){
         super.move();
-        super.getCharacter().setRotate(super.getCharacter().getRotate()+rotationalMovement);
+        super.getComponent().setRotate(super.getComponent().getRotate() + asteroidRotationalMovement);
     }
 }

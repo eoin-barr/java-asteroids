@@ -3,7 +3,7 @@ package sample;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class Projectile extends Character{
+public class Projectile extends Component{
     public Projectile(int x, int y, ProjectileType type){
         // Creates a new projectile
         super(new Polygon(2, -2, 2, 2, -2, 2, -2, -2), x, y, Color.BLACK);
@@ -14,26 +14,26 @@ public class Projectile extends Character{
 
     @Override
     public void move() {
-        super.getCharacter().setTranslateX(super.getCharacter().getTranslateX() + super.getMovement().getX());
-        super.getCharacter().setTranslateY(super.getCharacter().getTranslateY() + super.getMovement().getY());
+        super.getComponent().setTranslateX(super.getComponent().getTranslateX() + super.getMovement().getX());
+        super.getComponent().setTranslateY(super.getComponent().getTranslateY() + super.getMovement().getY());
 
         // Removes projectile if leaves right side of the game screen
-        if(super.getCharacter().getTranslateX()>GameView.gameScreenWidth){
+        if(super.getComponent().getTranslateX()>GameView.gameViewWidth){
             setAlive(false);
         }
 
         // Removes projectile if leaves left side of the game screen
-        if(super.getCharacter().getTranslateX()<0){
+        if(super.getComponent().getTranslateX()<0){
             setAlive(false);
         }
 
         // Removes projectile if leaves top of the game screen
-        if(super.getCharacter().getTranslateY()>GameView.gameScreenHeight){
+        if(super.getComponent().getTranslateY()>GameView.gameViewHeight){
             setAlive(false);
         }
 
         // Removes projectile if leaves bottom of the game screen
-        if(super.getCharacter().getTranslateY()<0){
+        if(super.getComponent().getTranslateY()<0){
             setAlive(false);
         }
 

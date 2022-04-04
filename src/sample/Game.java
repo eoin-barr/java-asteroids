@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 public interface Game {
     void setupGameView();
     Scene getGameScene();
-    int getGameScreenWidth();
-    int getGameScreenHeight();
+    int getGameViewWidth();
+    int getGameViewHeight();
     void navigateToGameOver();
 }

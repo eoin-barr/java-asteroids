@@ -3,7 +3,7 @@ package sample;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class Ship extends Character{
+public class Ship extends Component{
 
     public Ship(int x, int y){
         // Creates a new ship

@@ -16,19 +16,19 @@ import java.io.BufferedWriter;
 
 public class GameView implements Game {
     private Scene gameScene;
-    static int gameScreenWidth;
-    static int gameScreenHeight;
+    static int gameViewWidth;
+    static int gameViewHeight;
 
     public GameView(int width, int height){
-        gameScreenWidth = width;
-        gameScreenHeight = height;
+        gameViewWidth = width;
+        gameViewHeight = height;
     }
     
     public void setupGameView() {
         BorderPane gameView = new BorderPane();
         gameScene = new Scene(gameView);
         GameFunctionality game = new GameFunctionality(gameScene,this);
-        gameView.setPrefSize(gameScreenWidth,gameScreenHeight);
+        gameView.setPrefSize(gameViewWidth, gameViewHeight);
         Text mainMenu = new Text(10, 80, "Main Menu");
 
         mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -95,12 +95,12 @@ public class GameView implements Game {
         }
     }
 
-    public int getGameScreenWidth(){
-        return gameScreenWidth;
+    public int getGameViewWidth(){
+        return gameViewWidth;
     }
 
-    public int getGameScreenHeight(){
-        return gameScreenHeight;
+    public int getGameViewHeight(){
+        return gameViewHeight;
     }
 
     public Scene getGameScene(){

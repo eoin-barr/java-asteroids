@@ -5,14 +5,14 @@ import javafx.scene.shape.Polygon;
 
 import java.util.Random;
 
-public class Alien extends Character{
+public class Alien extends Component{
 
     public Alien(int x, int y, int level){
         // Create a new Alien
         super(new Polygon(12,12,-12,12,-18,2,-8,2,0,-12,8,2,18,2),x,y, Color.LIMEGREEN);
 
         // Ensure alien has no rotation
-        super.getCharacter().setRotate(0);
+        super.getComponent().setRotate(0);
 
         // Provide random component to the aliens acceleration
         Random rand = new Random();

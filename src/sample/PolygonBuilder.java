@@ -19,8 +19,8 @@ public class PolygonBuilder {
         }
 
         // rnd variable adds a random size to each polygon
-        Random rnd = new Random();
-        double size = base + rnd.nextInt(5);
+        Random random = new Random();
+        double size = base + random.nextInt(5);
 
         // Assigning polygon to a new Polygon
         Polygon polygon = new Polygon();
@@ -39,7 +39,7 @@ public class PolygonBuilder {
 
         for (int i = 0; i < polygon.getPoints().size(); i++) {
             // Adding random component to the polygon points
-            int change = rnd.nextInt(5) - 2;
+            int change = random.nextInt(5) - 2;
             polygon.getPoints().set(i, polygon.getPoints().get(i) + change);
         }
 
