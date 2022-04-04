@@ -24,18 +24,18 @@ public class PolygonBuilder {
 
         // Assigning polygon to a new Polygon
         Polygon polygon = new Polygon();
-        double c1 = Math.cos(Math.PI * 2 / 5);
-        double c2 = Math.cos(Math.PI / 5);
-        double s1 = Math.sin(Math.PI * 2 / 5);
-        double s2 = Math.sin(Math.PI * 4 / 5);
+        double a1 = Math.cos(Math.PI * 2 / 5);
+        double a2 = Math.cos(Math.PI / 5);
+        double b1 = Math.sin(Math.PI * 2 / 5);
+        double b2 = Math.sin(Math.PI * 4 / 5);
 
         // Adding the points to the Polygon
         polygon.getPoints().addAll(
                 size, 0.0,
-                size * c1, -1 * size * s1,
-                -1 * size * c2, -1 * size * s2,
-                -1 * size * c2, size * s2,
-                size * c1, size * s1);
+                size * a1, -1 * size * b1,
+                -1 * size * a2, -1 * size * b2,
+                -1 * size * a2, size * b2,
+                size * a1, size * b1);
 
         for (int i = 0; i < polygon.getPoints().size(); i++) {
             // Adding random component to the polygon points

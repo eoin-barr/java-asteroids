@@ -8,7 +8,7 @@ import java.util.Random;
 public class Alien extends Character{
 
     public Alien(int x, int y, int level){
-        // Create new Alien
+        // Create a new Alien
         super(new Polygon(12,12,-12,12,-18,2,-8,2,0,-12,8,2,18,2),x,y, Color.LIMEGREEN);
 
         // Ensure alien has no rotation
@@ -20,7 +20,7 @@ public class Alien extends Character{
         // base is used to ensure minimum speed of alien
         int base = 10;
 
-        // level increases the acceleration of the alien based on the level
+        // level variable increases the acceleration of the alien based on the level
         int accelerationValue = level + base + rand.nextInt(5);
         for (int i = 0; i < accelerationValue; i++){
             accelerate();

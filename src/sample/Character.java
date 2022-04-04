@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Polygon;
@@ -21,7 +22,7 @@ public abstract class Character implements Char {
         this.character = polygon;
         this.character.setTranslateY(y);
         this.character.setTranslateX(x);
-        this.character.setFill(color);
+        this.character.setFill(Color.WHITE);
         this.character.setStroke(color);
         this.movement = new Point2D(0, 0);
     }

@@ -14,7 +14,7 @@
                 <Font size="54.0" />
             </font>
         </Text>
-        <Button fx:id="mainMenuButton" layoutX="96.0" layoutY="69.0" mnemonicParsing="false" onAction="#navigateMainMenu" style="-fx-background-color: #292A2D;" text="←" textFill="#f25bb0">
+        <Button fx:id="mainMenuButton" layoutX="96.0" layoutY="69.0" mnemonicParsing="false" onAction="#navigateMainMenu" style="-fx-background-color: #292A2D; -fx-font: 24 arial;" text="⌂" textFill="#f25bb0">
             <font>
                 <Font size="18.0" />
             </font></Button>

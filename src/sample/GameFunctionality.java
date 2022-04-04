@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameFunctionality {
-    // Initialise game variables
+    // Initialise game instance variables
     private int level;
     private int lives;
     private Pane gamePane;
@@ -45,7 +45,7 @@ public class GameFunctionality {
         this.lives = 2;
 
         Random rand = new Random();
-        spawnInitialAsteroids();
+        createInitialAsteroids();
 
         ship = new Ship(gameSettings.getGameScreenWidth() / 2, gameSettings.getGameScreenHeight() / 2);
         alien = new Alien(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), level);
@@ -86,15 +86,9 @@ public class GameFunctionality {
                     // The Game over screen is opened
                     gameSettings.navigateToGameOver();
                 }
-                // If space bar is pressed and there are less than 5 projectiles on the screen an projectile is created
+                // If space bar is pressed and there are less than 5 projectiles on the screen a projectile is created
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 5) {
-                    Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY(), ProjectileType.SHIP);
-                    projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
-                    projectile.setAlive(true);
-                    projectiles.add(projectile);
-                    setProjectileSpeed(projectile);
-                    gamePane.getChildren().add(projectile.getCharacter());
-                    pressedKeys.put(KeyCode.SPACE, false);
+                    createProjectile(pressedKeys);
                 }
 
                 // Triggered when user has no lives left
@@ -110,12 +104,30 @@ public class GameFunctionality {
                 guaranteeCharactersMovement();
                 handleShipCollision();
                 levelUp();
-                handleAlienCreation();
+                handleAlienProjectileCreation();
                 deleteDeadCharacters(projectiles);
                 deleteDeadCharacters(asteroids);
                 checkForProjectileCollision();
             }
         }.start();
+    }
+
+    // Method creates a ship projectile when called
+    public void createProjectile(Map<KeyCode, Boolean> pressedKeys){
+        // Creates new projectile of type ship
+        Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY(), ProjectileType.SHIP);
+        // Sets the rotation of the projectile
+        projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
+        // Sets the projectile as alive
+        projectile.setAlive(true);
+        // Adds the projectile to the projectile array
+        projectiles.add(projectile);
+        // Sets the speed of the projectile
+        setProjectileSpeed(projectile);
+        // Adds the projectile to the game pane
+        gamePane.getChildren().add(projectile.getCharacter());
+        // Prevents a user from holding down space and spamming projectiles
+        pressedKeys.put(KeyCode.SPACE, false);
     }
 
     // Method ensures that alien, ship, asteroids and projectiles move correctly
@@ -133,19 +145,25 @@ public class GameFunctionality {
         if(checkForShipCollision()){
             lives -= 1;
             livesCounter.decreaseLives();
+            // Ship is moves to a new safe location whenever it is hit
+            // with an alien projectile or collides with an asteroid
             ship.hyperJump(asteroids);
         }
     }
 
     // Method handles the logic when a user levels up
     public void levelUp(){
+        // Checks if all asteroids have been removed
         if (asteroids.size() < 1){
             if (alien.isAlive()){
+                // Removes alien at end of level if alien is present
                 alien.setAlive(false);
                 gamePane.getChildren().remove(alien.getCharacter());
             }
+            // Increments the levels counters
             levelsCounter.increaseLevel();
             level += 1;
+            // Creates a number of new asteroids based on the level the user is on
             for (int i = 0; i < level; i++){
                 Random rand = new Random();
                 Asteroid newAsteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
@@ -159,10 +177,12 @@ public class GameFunctionality {
     }
 
     // Method handles alien creation
-    public void handleAlienCreation(){
+    public void handleAlienProjectileCreation(){
         if (!alien.isAlive()){
-            spawnAlien();
+            createAlien();
         } else {
+            // If an alien is currently present and a random number is
+            // less than 0.007 a new alien projectile is created
             if (Math.random() < 0.007){
                 createAlienProjectile();
             }
@@ -171,15 +191,23 @@ public class GameFunctionality {
 
     // Method creates an alien projectile
     public void createAlienProjectile(){
+        // Creates a projectile of type alien
         Projectile projectile = new Projectile((int) alien.getCharacter().getTranslateX(), (int) alien.getCharacter().getTranslateY(), ProjectileType.ALIEN);
+
+        // Gather the positions of the ship and alien
         double nextX = ship.getCharacter().getTranslateX();
         double currentX = alien.getCharacter().getTranslateX();
         double nextY = ship.getCharacter().getTranslateY();
         double currentY = alien.getCharacter().getTranslateY();
         double deltaX = nextX - currentX;
         double deltaY = nextY - currentY;
+
+        // Calculation that aims the alien projectile at the ship
         double theta = Math.atan2(deltaY, deltaX);
         projectile.getCharacter().setRotate(theta*180/Math.PI);
+
+        // Setting the projectile as alive, giving it speed
+        // and adding it to the gamePane
         projectile.setAlive(true);
         projectiles.add(projectile);
         setProjectileSpeed(projectile);
@@ -188,6 +216,9 @@ public class GameFunctionality {
 
     // Method removes dead characters from the gamePane
     public void deleteDeadCharacters(List<Character> listOfCharacters) {
+        // Using stream to iterate through each character in the
+        // theListOfCharacters and if its .isAlive is false it is removed
+        // from the gamePane
         listOfCharacters.stream()
                 .filter(character -> !character.isAlive())
                 .forEach(character -> {
@@ -200,6 +231,7 @@ public class GameFunctionality {
 
     // Method captures a users input
     public Map<KeyCode, Boolean> captureKeyboardInput() {
+        // Creating the pressedKeys hashMap
         Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
         gameScene.setOnKeyPressed(keyEvent -> {
             pressedKeys.put(keyEvent.getCode(), true);
@@ -211,9 +243,10 @@ public class GameFunctionality {
         return pressedKeys;
     }
 
-    // Method spawns an alien
-    public void spawnAlien(){
-        if (Math.random() < 0.003){
+    // Method creates an alien
+    public void createAlien(){
+        // A random number is less than 0.0025 a new alien is created
+        if (Math.random() < 0.0025){
             Random rand = new Random();
             alien = new Alien(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), level);
             alien.setAlive(true);
@@ -221,15 +254,13 @@ public class GameFunctionality {
         }
     }
 
-    // Method spawns initials asteroids to the screen
-    public void spawnInitialAsteroids() {
+    // Method adds initial asteroids to the screen
+    public void createInitialAsteroids() {
         asteroids = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
             Random rand = new Random();
             Asteroid asteroid = new Asteroid(rand.nextInt(gameSettings.getGameScreenWidth()), rand.nextInt(gameSettings.getGameScreenHeight()), AsteroidSize.LARGE, level);
             asteroids.add(asteroid);
             asteroid.setAlive(true);
-        }
     }
 
     // Method sets speed of a projectile
