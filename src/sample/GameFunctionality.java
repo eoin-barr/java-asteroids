@@ -40,9 +40,9 @@ public class GameFunctionality {
         this.levelsCounter = levelsCounter;
         this.livesCounter = livesCounter;
         levelsCounter.increaseLevel();
-        livesCounter.increaseLives(2);
+        livesCounter.increaseLives(5);
         this.level = 1;
-        this.lives = 2;
+        this.lives = 5;
 
         Random rand = new Random();
         createInitialAsteroids();
@@ -107,14 +107,8 @@ public class GameFunctionality {
                 handleAlienProjectileCreation();
                 deleteDeadComponents(projectiles);
                 deleteDeadComponents(asteroids);
-//                deleteComponentsProjectiles();
-//                deleteComponentsAsteroids();
-
-                
-                // Put try catch here to catch the error
                 try {
                     checkForProjectileCollision();
-
                 }catch (Exception e){
                     System.out.println(e);
                 }
@@ -240,26 +234,6 @@ public class GameFunctionality {
                 .collect(Collectors.toList()));
     }
 
-    public void deleteComponentsProjectiles(){
-        for (Iterator<Component> p = projectiles.iterator(); p.hasNext();){
-            Component projectile = p.next();
-            if (!projectile.isAlive()){
-                p.remove();
-                gamePane.getChildren().remove(projectile.getComponent());
-            }
-        }
-    }
-
-    public void deleteComponentsAsteroids(){
-        for (Iterator<Component> a = asteroids.iterator(); a.hasNext();){
-            Component asteroid = a.next();
-            if (!asteroid.isAlive()){
-                a.remove();
-                gamePane.getChildren().remove(asteroid.getComponent());
-            }
-        }
-    }
-
     // Method captures a users input
     public Map<KeyCode, Boolean> captureKeyboardInput() {
         // Creating the pressedKeys hashMap
@@ -381,7 +355,7 @@ public class GameFunctionality {
         });
     }
 
-    //// Attempt to use Iterator to fix warnings in console when an asteroid is broken up
+    //// Attempt to use Iterator to fix ConcurrentModificationException in console when an asteroid is broken up
     public void checkForProjectileCollision2(){
         for (Iterator<Component> p = projectiles.iterator(); p.hasNext();){
             Component projectile = p.next();
@@ -397,22 +371,17 @@ public class GameFunctionality {
                 Component asteroid = a.next();
                 if (projectile.getProjectileType() == ProjectileType.SHIP && projectile.collide(asteroid)){
                     projectile.setAlive(false);
-                    ////
-
                     try{
                         p.remove();
-
                         gamePane.getChildren().remove(projectile.getComponent());
 
                     } catch(Exception e){
                         System.out.println("1" + e);
                     }
-                    //////
                     int x = (int) asteroid.getComponent().getTranslateX();
                     int y = (int) asteroid.getComponent().getTranslateY();
                     AsteroidSize asteroidSize = asteroid.getSize();
                     asteroid.setAlive(false);
-                    ////
                     try{
                         a.remove();
 
@@ -421,7 +390,6 @@ public class GameFunctionality {
                     }catch (Exception e){
                         System.out.println("2" + e);
                     }
-                    ////
                     pointsCounter.increasePoints(getScore(asteroid.getSize()));
                     AsteroidSize size;
 
@@ -448,7 +416,7 @@ public class GameFunctionality {
         }
     }
 
-    // Attempt to use streams to fix warnings in console when an asteroid is broken up
+    // Attempt to use streams to fix ConcurrentModificationException in console when an asteroid is broken up
     public void checkForProjectileCollision3(List<Component> asteroids, List <Component> projectiles){
         projectiles.stream().forEach(projectile -> {
             if (alien.isAlive()){
