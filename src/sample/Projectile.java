@@ -3,7 +3,7 @@ package sample;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class Projectile extends Component{
+public class Projectile extends Component implements ComponentType{
     public Projectile(int x, int y, ProjectileType type){
         // Creates a new projectile
         super(new Polygon(2, -2, 2, 2, -2, 2, -2, -2), x, y, Color.BLACK);

@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 import java.util.Random;
 
-public class Asteroid extends Component {
+public class Asteroid extends Component implements ComponentType {
 
     final double asteroidRotationalMovement;
 
