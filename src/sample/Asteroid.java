@@ -19,7 +19,7 @@ public class Asteroid extends Component {
         Random random = new Random();
 
         // level increases the acceleration of the asteroid based on the level
-        level *= 2;
+        level += 2;
 
         // base is used to ensure minimum speed of the asteroid and
         // is adjusted based on the size of the asteroid

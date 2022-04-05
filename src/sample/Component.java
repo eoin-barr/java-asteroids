@@ -127,7 +127,7 @@ public abstract class Component implements ComponentType {
 
     // Method which checks if a component is alive
     public boolean isAlive(){
-        return alive;
+        return this.alive;
     }
 
     // Method which sets the size of a component

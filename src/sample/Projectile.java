@@ -18,22 +18,22 @@ public class Projectile extends Component{
         super.getComponent().setTranslateY(super.getComponent().getTranslateY() + super.getMovement().getY());
 
         // Removes projectile if leaves right side of the game screen
-        if(super.getComponent().getTranslateX()>GameView.gameViewWidth){
+        if(super.getComponent().getTranslateX() > GameView.gameViewWidth){
             setAlive(false);
         }
 
         // Removes projectile if leaves left side of the game screen
-        if(super.getComponent().getTranslateX()<0){
+        if(super.getComponent().getTranslateX() < 0){
             setAlive(false);
         }
 
         // Removes projectile if leaves top of the game screen
-        if(super.getComponent().getTranslateY()>GameView.gameViewHeight){
+        if(super.getComponent().getTranslateY() > GameView.gameViewHeight){
             setAlive(false);
         }
 
         // Removes projectile if leaves bottom of the game screen
-        if(super.getComponent().getTranslateY()<0){
+        if(super.getComponent().getTranslateY() < 0){
             setAlive(false);
         }
 
