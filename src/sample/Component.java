@@ -63,7 +63,11 @@ public abstract class Component implements ComponentType {
         // Placing the component in the new location
         this.component.setTranslateX(newX);
         this.component.setTranslateY(newY);
+        // Stopping the component from moving once it has been placed
+        // in the new location
+        this.stopMovement(this.movement);
     }
+
 
     public void move() {
         this.component.setTranslateX(this.component.getTranslateX() + this.movement.getX());
@@ -118,6 +122,11 @@ public abstract class Component implements ComponentType {
     // Method which sets the movement of a component
     public void setMovement(Point2D movement){
         this.movement = this.movement.add(movement.getX(),movement.getY());
+    }
+
+    // Method which stops the movement of a component
+    public void stopMovement(Point2D movement){
+        this.movement = this.movement.subtract(movement.getX(), movement.getY());
     }
 
     // Method which sets if a component is alive or not
